@@ -1,5 +1,5 @@
 from selenium import webdriver
-# from selenium.webdriver.common.by import By
+from selenium.webdriver.common.by import By
 
 import unittest
 
@@ -15,13 +15,16 @@ class TestFront(unittest.TestCase):
     # Open browser to find home page
     def test_front_of_home(self):
         self.browser.get('http://localhost:5000')
+        """
+        Look at the menu. See available options: 
+        1. Sign-Up
+        2. Log-In
+        3. Game Editor
+        """
+        self.browser.find_element(By.ID, "sign-up")
+        self.browser.find_element(By.ID, "log-in")
+        self.browser.find_element(By.ID, "game-edit")
 
-    """
-    Look at the menu. See available options: 
-    1. Sign-Up
-    2. Log-In
-    3. Game Editor
-    """
 
 
 if __name__ == "__main__":
