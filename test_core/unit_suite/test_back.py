@@ -16,6 +16,11 @@ class TestBack(unittest.TestCase):
         for i in ids:
             self.assertIn(i, response.data.decode())
 
+    def test_back_of_signup(self):
+        response = self.server.get('/signup')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('form', response.data.decode())
+
 
 if __name__ == '__main__':
     unittest.main()
