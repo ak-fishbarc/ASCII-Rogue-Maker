@@ -21,10 +21,20 @@ class TestFront(unittest.TestCase):
         2. Log-In
         3. Game Editor
         """
-        self.browser.find_element(By.ID, "sign-up")
-        self.browser.find_element(By.ID, "log-in")
-        self.browser.find_element(By.ID, "game-edit")
+        ids = ["sign-up", "log-in", "game-edit"]
+        for i in ids:
+            self.browser.find_element(By.ID, i)
 
+    # Open http://localhost:5000/signup to find a registration form.
+    def test_front_of_signup(self):
+        self.browser.get('http://localhost:5000/signup')
+        self.browser.find_element(By.TAG_NAME, 'form')
+
+        # Find input fields.
+        ids = ["username", "password", "password2", "email_addr", "submit"]
+        for i in ids:
+            self.browser.find_element(By.ID, i)
+    # Create an account.
 
 
 if __name__ == "__main__":
