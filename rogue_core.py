@@ -5,6 +5,7 @@ from rogue_forms import forms
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from models import initialize_users
 
 
 def create_app():
@@ -18,16 +19,23 @@ def create_app():
 
 
 def create_db(app):
-    db = SQLAlchemy(app)
-    # Amazing solution to circular dependency... <3
-    db.relationship('User')
+    db = SQLAlchemy()
     migrate = Migrate(app, db)
 
     return db
 
 
+def set_up_db_users(db):
+    User = initialize_users(db)
+    # Amazing solution to circular dependency... <3
+    db.relationship('User')
+
+    return User
+
+
 app = create_app()
 db = create_db(app)
+User = set_up_db_users(db)
 
 
 if __name__ == "__main__":
