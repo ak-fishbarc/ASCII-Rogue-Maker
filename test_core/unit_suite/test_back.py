@@ -1,19 +1,24 @@
 import unittest
 
 from werkzeug.test import Client
-from rogue_core import app, db
-from models import User
+from rogue_core import create_app, create_db, set_up_db_users
+from config import TestingConfig
 
 
 class TestBack(unittest.TestCase):
 
     def setUp(self):
-        app.app_context().push()
-        self.server = Client(app)
-        db.create_all()
+        self.app = create_app()
+        self.app.config.from_object(TestingConfig)
+        self.db = create_db(self.app)
+        self.db.init_app(self.app)
+        self.app.app_context().push()
+        self.server = Client(self.app)
+        self.User = set_up_db_users(self.db)
+        self.db.create_all()
 
     def tearDown(self):
-        db.drop_all()
+        self.db.drop_all()
 
     def test_back_of_home(self):
         response = self.server.get('/')
@@ -28,11 +33,11 @@ class TestBack(unittest.TestCase):
         self.assertIn('form', response.data.decode())
 
     def test_db_user_model(self):
-        u = User(username="DecardCain", email="DecardCain@example.co.uk")
-        db.session.add(u)
-        db.session.commit()
+        u = self.User(username="DecardCain", email="DecardCain@example.co.uk")
+        self.db.session.add(u)
+        self.db.session.commit()
 
-        query_users = User.query.all()
+        query_users = self.User.query.all()
         self.assertIn("DecardCain", query_users[0].username)
 
 
