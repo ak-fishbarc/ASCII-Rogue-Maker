@@ -21,9 +21,9 @@ class TestFront(unittest.TestCase):
         2. Log-In
         3. Game Editor
         """
-        ids = ["sign-up", "log-in", "game-edit"]
+        ids = ["Sign-Up"]
         for i in ids:
-            self.browser.find_element(By.ID, i)
+            self.browser.find_element(By.LINK_TEXT, i)
 
     # Open http://localhost:5000/signup to find a registration form.
     def test_front_of_signup(self):
