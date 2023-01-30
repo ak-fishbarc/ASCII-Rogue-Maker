@@ -27,7 +27,6 @@ def create_db(app):
 
 def set_up_db_users(db):
     User = initialize_users(db)
-    # Amazing solution to circular dependency... <3
     db.relationship('User')
 
     return User
