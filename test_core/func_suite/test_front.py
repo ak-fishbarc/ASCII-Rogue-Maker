@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 
 import unittest
+import time
 
 
 class TestFront(unittest.TestCase):
@@ -23,18 +24,30 @@ class TestFront(unittest.TestCase):
         """
         ids = ["Sign-Up"]
         for i in ids:
-            self.browser.find_element(By.LINK_TEXT, i)
+            self.browser.find_element(By.LINK_TEXT, i).click()
 
     # Open http://localhost:5000/signup to find a registration form.
     def test_front_of_signup(self):
         self.browser.get('http://localhost:5000/signup')
-        self.browser.find_element(By.TAG_NAME, 'form')
+        form = self.browser.find_element(By.TAG_NAME, 'form')
 
         # Find input fields.
         ids = ["username", "password", "password2", "email_addr", "submit"]
-        for i in ids:
-            self.browser.find_element(By.ID, i)
-    # Create an account.
+        these_keys = ["Jon Irenicus", "operationAurora", "operationAurora", "jon.irenicus@imaginary.co.uk"]
+
+        # Create an account.
+        i = 0
+        while i < len(these_keys):
+            time.sleep(3)
+            field = self.browser.find_element(By.ID, ids[i])
+            field.send_keys(these_keys[i])
+            i += 1
+
+        form.submit()
+
+        time.sleep(3)
+        check_page = self.browser.current_url
+        self.assertNotEqual(check_page, 'http://localhost:5000/signup')
 
 
 if __name__ == "__main__":
