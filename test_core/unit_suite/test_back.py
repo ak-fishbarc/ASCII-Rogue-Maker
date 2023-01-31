@@ -2,19 +2,28 @@ import unittest
 
 from werkzeug.test import Client
 from rogue_core import create_app, create_db, set_up_db_users
+from rogue_forms import create_forms
+from rogue_routes import create_routes
 from config import TestingConfig
 
 
 class TestBack(unittest.TestCase):
 
     def setUp(self):
+        ########################
+        # Clean this up next.  #
+        ########################
         self.app = create_app()
         self.app.config.from_object(TestingConfig)
         self.db = create_db(self.app)
         self.db.init_app(self.app)
-        self.app.app_context().push()
         self.server = Client(self.app)
         self.User = set_up_db_users(self.db)
+        forms, RegisterForm = create_forms(self.User)
+        self.app.register_blueprint(forms)
+        routes = create_routes(RegisterForm)
+        self.app.register_blueprint(routes)
+        self.app.app_context().push()
         self.db.create_all()
 
     def tearDown(self):
