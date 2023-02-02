@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_bootstrap import Bootstrap
+from flask_login import LoginManager, UserMixin
 from rogue_routes import create_routes
 from rogue_forms import create_forms
 from config import Config
@@ -22,28 +23,36 @@ def create_db(app):
     return db
 
 
-def set_up_db_users(db):
-    User = initialize_users(db)
+def set_up_db_users(db, UserMixin):
+    User = initialize_users(db, UserMixin)
     db.relationship(User)
     return User
 
-###############################
-# This will need cleaning up. #
-###############################
 
-
+# Create app.
 app = create_app()
-db = create_db(app)
-User = set_up_db_users(db)
+login = LoginManager(app)
 
+# Set up database.
+db = create_db(app)
+User = set_up_db_users(db, UserMixin)
 db.init_app(app)
 
+# Set up blueprints.
 forms, RegisterForm = create_forms(User)
 app.register_blueprint(forms)
-routes = create_routes(RegisterForm)
+routes = create_routes(RegisterForm, User, db)
 app.register_blueprint(routes)
+
+# Build everything up.
 app.app_context().push()
 db.create_all()
+
+
+@login.user_loader
+def load_user(id):
+    return User.query.get(int(id))
+
 
 if __name__ == "__main__":
     app.run()

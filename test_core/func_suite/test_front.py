@@ -42,7 +42,6 @@ class TestFront(unittest.TestCase):
             field = self.browser.find_element(By.ID, ids[i])
             field.send_keys(these_keys[i])
             i += 1
-
         form.submit()
 
         time.sleep(3)
