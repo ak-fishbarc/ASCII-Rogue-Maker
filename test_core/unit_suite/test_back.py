@@ -22,9 +22,9 @@ class TestBack(unittest.TestCase):
         self.db.init_app(self.app)
 
         # Set up routes.
-        forms, RegisterForm = create_forms(self.User)
+        forms, RegisterForm, LoginForm = create_forms(self.User)
         self.app.register_blueprint(forms)
-        routes = create_routes(RegisterForm, self.User, self.db)
+        routes = create_routes(RegisterForm, LoginForm, self.User, self.db)
         self.app.register_blueprint(routes)
 
         # Build up.
@@ -43,6 +43,11 @@ class TestBack(unittest.TestCase):
 
     def test_back_of_signup(self):
         response = self.server.get('/signup')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('form', response.data.decode())
+
+    def test_back_of_login(self):
+        response = self.server.get('/login')
         self.assertEqual(response.status_code, 200)
         self.assertIn('form', response.data.decode())
 

@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask import render_template, redirect, url_for
 
 
-def create_routes(RegisterForm, User, db):
+def create_routes(RegisterForm, LoginForm, User, db):
 
     routes = Blueprint('routes', __name__)
 
@@ -21,5 +21,10 @@ def create_routes(RegisterForm, User, db):
             db.session.commit()
             return redirect(url_for('routes.home'))
         return render_template('signup.html', form=form)
+
+    @routes.route("/login", methods=["GET", "POST"])
+    def login():
+        form = LoginForm()
+        return render_template('login.html', form=form)
 
     return routes

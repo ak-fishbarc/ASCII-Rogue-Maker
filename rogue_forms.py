@@ -25,4 +25,9 @@ def create_forms(db_model):
             if user is not None:
                 raise ValidationError("Wrong email address. Please try a different one.")
 
-    return forms, RegisterForm
+    class LoginForm(FlaskForm):
+        username = StringField('Username', validators=[DataRequired()])
+        password = PasswordField('Password', validators=[DataRequired()])
+        submit = SubmitField('Login')
+
+    return forms, RegisterForm, LoginForm

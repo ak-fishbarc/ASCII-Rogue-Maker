@@ -38,7 +38,7 @@ class TestFront(unittest.TestCase):
         # Create an account.
         i = 0
         while i < len(these_keys):
-            time.sleep(3)
+            time.sleep(1)
             field = self.browser.find_element(By.ID, ids[i])
             field.send_keys(these_keys[i])
             i += 1
@@ -47,6 +47,11 @@ class TestFront(unittest.TestCase):
         time.sleep(3)
         check_page = self.browser.current_url
         self.assertNotEqual(check_page, 'http://localhost:5000/signup')
+
+    # Open http://localhost:5000/login to find a login form.
+    def test_front_of_login(self):
+        self.browser.get('http://localhost:5000/login')
+        form = self.browser.find_element(By.TAG_NAME, 'form')
 
 
 if __name__ == "__main__":
