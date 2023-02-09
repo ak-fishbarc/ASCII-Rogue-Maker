@@ -44,7 +44,7 @@ class TestFront(unittest.TestCase):
             i += 1
         form.submit()
 
-        time.sleep(3)
+        time.sleep(1)
         check_page = self.browser.current_url
         self.assertNotEqual(check_page, 'http://localhost:5000/signup')
 
@@ -52,6 +52,21 @@ class TestFront(unittest.TestCase):
     def test_front_of_login(self):
         self.browser.get('http://localhost:5000/login')
         form = self.browser.find_element(By.TAG_NAME, 'form')
+        # Find input fields.
+        ids = ["username", "password", "submit"]
+        these_keys = ["Jon Irenicus", "operationAurora"]
+        # Login to account.
+        i = 0
+        while i < len(these_keys):
+            time.sleep(1)
+            field = self.browser.find_element(By.ID, ids[i])
+            field.send_keys(these_keys[i])
+            i += 1
+        form.submit()
+
+        time.sleep(1)
+        check_page = self.browser.current_url
+        self.assertNotEqual(check_page, 'http://localhost:5000/login')
 
 
 if __name__ == "__main__":
