@@ -39,9 +39,9 @@ User = set_up_db_users(db, UserMixin)
 db.init_app(app)
 
 # Set up blueprints.
-forms, RegisterForm = create_forms(User)
+forms, RegisterForm, LoginForm = create_forms(User)
 app.register_blueprint(forms)
-routes = create_routes(RegisterForm, User, db)
+routes = create_routes(RegisterForm, LoginForm, User, db)
 app.register_blueprint(routes)
 
 # Build everything up.
