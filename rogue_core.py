@@ -23,8 +23,8 @@ def create_db(app):
     return db
 
 
-def set_up_db_users(db, UserMixin):
-    User = initialize_users(db, UserMixin)
+def set_up_db_users(db, UserMixin, login):
+    User = initialize_users(db, UserMixin, login)
     db.relationship(User)
     return User
 
@@ -35,7 +35,7 @@ login = LoginManager(app)
 
 # Set up database.
 db = create_db(app)
-User = set_up_db_users(db, UserMixin)
+User = set_up_db_users(db, UserMixin, login)
 db.init_app(app)
 
 # Set up blueprints.
