@@ -1,6 +1,6 @@
 from flask import Blueprint, flash
 from flask import render_template, redirect, url_for
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
 
 
 def create_routes(RegisterForm, LoginForm, User, db):
@@ -41,5 +41,11 @@ def create_routes(RegisterForm, LoginForm, User, db):
     def logout():
         logout_user()
         return redirect(url_for('routes.home'))
+
+    @routes.route('/user/<username>')
+    @login_required
+    def user(username):
+        user = User.query.filter_by(username=username).first_or_404()
+        return render_template('profile.html', user=user)
 
     return routes
