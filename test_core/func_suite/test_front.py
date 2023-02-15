@@ -22,8 +22,9 @@ class TestFront(unittest.TestCase):
         2. Log-In
         4. Game Editor
         """
-        ids = ["Sign-Up"]
+        ids = ["Sign-Up", "Login"]
         for i in ids:
+            self.browser.get('http://localhost:5000')
             self.browser.find_element(By.LINK_TEXT, i).click()
 
     # Open http://localhost:5000/signup to find a registration form.
@@ -67,6 +68,11 @@ class TestFront(unittest.TestCase):
         time.sleep(1)
         check_page = self.browser.current_url
         self.assertNotEqual(check_page, 'http://localhost:5000/login')
+
+    def test_front_of_profile(self):
+        self.browser.get('http://localhost:5000/user/Jon Irenicus')
+        check_title = self.browser.find_element(By.TAG_NAME, 'h1')
+        self.assertNotEqual(check_title.text, "Unauthorized")
 
 
 if __name__ == "__main__":
