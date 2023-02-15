@@ -1,7 +1,7 @@
 import unittest
 
 from werkzeug.test import Client
-from rogue_core import create_app, create_db, set_up_db_users, UserMixin
+from rogue_core import create_app, create_db, set_up_db_users, UserMixin, LoginManager
 from rogue_forms import create_forms
 from rogue_routes import create_routes
 from config import TestingConfig
@@ -13,12 +13,13 @@ class TestBack(unittest.TestCase):
 
         # Create app.
         self.app = create_app()
+        self.login = LoginManager(self.app)
         self.app.config.from_object(TestingConfig)
         self.server = Client(self.app)
 
         # Create database.
         self.db = create_db(self.app)
-        self.User = set_up_db_users(self.db, UserMixin)
+        self.User = set_up_db_users(self.db, UserMixin, self.login)
         self.db.init_app(self.app)
 
         # Set up routes.
@@ -36,7 +37,8 @@ class TestBack(unittest.TestCase):
 
     def test_back_of_home(self):
         response = self.server.get('/')
-        ids = ['<a href="/signup">', "log-in", "game-edit"]
+        # Logout after login. To be changed later.
+        ids = ['<a href="/signup">', '<a href="/login">', '<a href="/logout">', "game-edit"]
         self.assertEqual(response.status_code, 200)
         for i in ids:
             self.assertIn(i, response.data.decode())
