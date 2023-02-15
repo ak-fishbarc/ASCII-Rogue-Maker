@@ -3,6 +3,7 @@
 {% block content %}
     <h1>Test Message</h1>
     <a href="{{ url_for('routes.signup') }}">Sign-Up</a>
-    <button id="log-in">Log-In</button>
+    <a href="{{ url_for('routes.login') }}">Log-In</a>
+    <a href="{{ url_for('routes.logout') }}">Logout</a>
     <button id="game-edit">Game Editor</button>
 {% endblock %}

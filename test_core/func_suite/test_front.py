@@ -20,7 +20,7 @@ class TestFront(unittest.TestCase):
         Look at the menu. See available options: 
         1. Sign-Up
         2. Log-In
-        3. Game Editor
+        4. Game Editor
         """
         ids = ["Sign-Up"]
         for i in ids:

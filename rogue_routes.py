@@ -1,6 +1,7 @@
 from flask import Blueprint, flash
 from flask import render_template, redirect, url_for
-from flask_login import current_user, login_user
+from flask_login import current_user, login_user, logout_user
+
 
 def create_routes(RegisterForm, LoginForm, User, db):
 
@@ -35,5 +36,10 @@ def create_routes(RegisterForm, LoginForm, User, db):
             login_user(user)
             return redirect(url_for('routes.home'))
         return render_template('login.html', form=form)
+
+    @routes.route("/logout")
+    def logout():
+        logout_user()
+        return redirect(url_for('routes.home'))
 
     return routes
