@@ -19,7 +19,7 @@ def create_forms(db_model):
             user = db_model.query.filter_by(username=username.data).first()
             if user is not None:
                 raise ValidationError("Please change the username.")
-        
+
         def validate_email(self, email):
             user = db_model.query.filter_by(email=email.data).first()
             if user is not None:
@@ -31,3 +31,19 @@ def create_forms(db_model):
         submit = SubmitField('Login')
 
     return forms, RegisterForm, LoginForm
+
+
+def create_game_forms(db_model):
+
+    game_forms = Blueprint('game_forms', __name__)
+
+    class NewGameForm(FlaskForm):
+        gamename = StringField('Gamename', validators=[DataRequired()])
+        submit = SubmitField('Create New Game')
+
+        def validate_gamename(self, gamename):
+            new_game = db_model.query.filter_by(gamename=gamename.data).first()
+            if new_game is not None:
+                raise ValidationError("Please change the name.")
+
+    return game_forms, NewGameForm
