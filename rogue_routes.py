@@ -48,6 +48,8 @@ def create_routes(RegisterForm, LoginForm, User, db):
         user = User.query.filter_by(username=username).first_or_404()
         return render_template('profile.html', user=user)
 
-
+    @routes.route('/game_editor')
+    def game_editor():
+        return render_template('game_editor.html')
 
     return routes
