@@ -1,7 +1,7 @@
 import unittest
 
 from werkzeug.test import Client
-from rogue_core import create_app, create_db, set_up_db_users, UserMixin, LoginManager
+from rogue_core import create_app, create_db, set_up_db_users, set_up_db_game, UserMixin, LoginManager
 from rogue_forms import create_forms
 from rogue_routes import create_routes
 from config import TestingConfig
@@ -22,6 +22,11 @@ class TestBack(unittest.TestCase):
         self.User = set_up_db_users(self.db, UserMixin, self.login)
         self.db.init_app(self.app)
 
+        # Create game database.
+        self.game_db = create_db(self.app)
+        self.Game = set_up_db_game(self.game_db)
+        self.game_db.init_app(self.app)
+
         # Set up routes.
         forms, RegisterForm, LoginForm = create_forms(self.User)
         self.app.register_blueprint(forms)
@@ -31,9 +36,11 @@ class TestBack(unittest.TestCase):
         # Build up.
         self.app.app_context().push()
         self.db.create_all()
+        self.game_db.create_all()
 
     def tearDown(self):
         self.db.drop_all()
+        self.game_db.drop_all()
 
     def test_back_of_home(self):
         response = self.server.get('/')
@@ -64,6 +71,14 @@ class TestBack(unittest.TestCase):
 
         query_users = self.User.query.all()
         self.assertIn("DecardCain", query_users[0].username)
+
+    def test_db_game_model(self):
+        g = self.Game(gamename="UltimateRPG")
+        self.game_db.session.add(g)
+        self.game_db.session.commit()
+
+        query_games = self.Game.query.all()
+        self.assertIn("UltimateRPG", query_games[0].gamename)
 
 
 if __name__ == '__main__':

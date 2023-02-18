@@ -25,3 +25,13 @@ def initialize_users(db, UserMixin, login):
     return User
 
 
+def initialize_game(db):
+
+    class Game(db.Model):
+        __bind_key__ = "game_db"
+        id = db.Column(db.Integer, primary_key=True)
+        gamename = db.Column(db.String(64), index=True, unique=True)
+
+    return Game
+
+
