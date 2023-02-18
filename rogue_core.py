@@ -2,7 +2,7 @@ from flask import Flask
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager, UserMixin
 from rogue_routes import create_routes
-from rogue_forms import create_forms
+from rogue_forms import create_forms, create_game_forms
 from config import Config
 
 from flask_sqlalchemy import SQLAlchemy
@@ -52,6 +52,9 @@ game_db.init_app(app)
 
 # Set up blueprints.
 forms, RegisterForm, LoginForm = create_forms(User)
+game_forms, NewGameForm = create_game_forms(Game)
+
+app.register_blueprint(game_forms)
 app.register_blueprint(forms)
 routes = create_routes(RegisterForm, LoginForm, User, db)
 app.register_blueprint(routes)
