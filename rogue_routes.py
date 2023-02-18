@@ -48,4 +48,6 @@ def create_routes(RegisterForm, LoginForm, User, db):
         user = User.query.filter_by(username=username).first_or_404()
         return render_template('profile.html', user=user)
 
+
+
     return routes

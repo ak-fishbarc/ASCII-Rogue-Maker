@@ -4,9 +4,10 @@ from selenium.webdriver.common.by import By
 import unittest
 import time
 
+from rogue_core import db, User
 
-class TestFront(unittest.TestCase):
 
+class TestFirst(unittest.TestCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
 
@@ -28,7 +29,7 @@ class TestFront(unittest.TestCase):
             self.browser.find_element(By.LINK_TEXT, i).click()
 
     # Open http://localhost:5000/signup to find a registration form.
-    def test_front_of_signup(self):
+    def test_01_front_of_signup(self):
         self.browser.get('http://localhost:5000/signup')
         form = self.browser.find_element(By.TAG_NAME, 'form')
 
@@ -50,7 +51,7 @@ class TestFront(unittest.TestCase):
         self.assertNotEqual(check_page, 'http://localhost:5000/signup')
 
     # Open http://localhost:5000/login to find a login form.
-    def test_front_of_login(self):
+    def test_02_front_of_login(self):
         self.browser.get('http://localhost:5000/login')
         form = self.browser.find_element(By.TAG_NAME, 'form')
         # Find input fields.
@@ -69,10 +70,14 @@ class TestFront(unittest.TestCase):
         check_page = self.browser.current_url
         self.assertNotEqual(check_page, 'http://localhost:5000/login')
 
-    def test_front_of_profile(self):
         self.browser.get('http://localhost:5000/user/Jon Irenicus')
         check_title = self.browser.find_element(By.TAG_NAME, 'h1')
         self.assertNotEqual(check_title.text, "Unauthorized")
+
+    def test_03_drop_database_changes(self):
+        clean_up = User.query.filter_by(username="Jon Irenicus").first()
+        db.session.delete(clean_up)
+        db.session.commit()
 
 
 if __name__ == "__main__":
