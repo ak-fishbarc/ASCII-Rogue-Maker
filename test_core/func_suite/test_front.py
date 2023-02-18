@@ -74,7 +74,14 @@ class TestFirst(unittest.TestCase):
         check_title = self.browser.find_element(By.TAG_NAME, 'h1')
         self.assertNotEqual(check_title.text, "Unauthorized")
 
-    def test_03_drop_database_changes(self):
+        time.sleep(1)
+        self.browser.get('http://localhost:5000/home')
+        self.browser.find_element(By.LINK_TEXT, "Logout")
+        self.browser.find_element(By.LINK_TEXT, "Game Editor").click()
+        check_page = self.browser.current_url
+        self.assertNotEqual(check_page, 'http://localhost:5000/home')
+
+    def test_04_drop_database_changes(self):
         clean_up = User.query.filter_by(username="Jon Irenicus").first()
         db.session.delete(clean_up)
         db.session.commit()

@@ -9,6 +9,6 @@
     {% else %}
     <a href="{{ url_for('routes.user', username=current_user.username) }}">Profile</a>
     <a href="{{ url_for('routes.logout') }}">Logout</a>
-    <button id="game-edit">Game Editor</button>
+    <a href="{{ url_for('routes.game_editor')}}">Game Editor</a>
     {% endif %}
 {% endblock %}

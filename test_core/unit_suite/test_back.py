@@ -38,7 +38,7 @@ class TestBack(unittest.TestCase):
     def test_back_of_home(self):
         response = self.server.get('/')
         # Logout after login. To be changed later.
-        ids = ['<a href="/signup">', '<a href="/login">', '<a href="/logout">', "game-edit"]
+        ids = ['<a href="/signup">', '<a href="/login">']
         self.assertEqual(response.status_code, 200)
         for i in ids:
             self.assertIn(i, response.data.decode())
@@ -52,6 +52,10 @@ class TestBack(unittest.TestCase):
         response = self.server.get('/login')
         self.assertEqual(response.status_code, 200)
         self.assertIn('form', response.data.decode())
+
+    def test_back_of_game_editor(self):
+        response = self.server.get('/game_editor')
+        self.assertEqual(response.status_code, 200)
 
     def test_db_user_model(self):
         u = self.User(username="DecardCain", email="DecardCain@example.co.uk")
