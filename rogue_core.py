@@ -56,7 +56,7 @@ game_forms, NewGameForm = create_game_forms(Game)
 
 app.register_blueprint(game_forms)
 app.register_blueprint(forms)
-routes = create_routes(RegisterForm, LoginForm, User, db)
+routes = create_routes(RegisterForm, LoginForm, NewGameForm, User, Game, db)
 app.register_blueprint(routes)
 
 # Build everything up.

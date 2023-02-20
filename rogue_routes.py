@@ -3,7 +3,7 @@ from flask import render_template, redirect, url_for
 from flask_login import current_user, login_user, logout_user, login_required
 
 
-def create_routes(RegisterForm, LoginForm, User, db):
+def create_routes(RegisterForm, LoginForm, NewGameForm, User, Game, db):
 
     routes = Blueprint('routes', __name__)
 
@@ -48,8 +48,17 @@ def create_routes(RegisterForm, LoginForm, User, db):
         user = User.query.filter_by(username=username).first_or_404()
         return render_template('profile.html', user=user)
 
-    @routes.route('/game_editor')
+    @routes.route('/game_editor', methods=["GET", "POST"])
     def game_editor():
-        return render_template('game_editor.html')
+        if current_user.is_authenticated:
+            form = NewGameForm()
+            if form.validate_on_submit():
+                game = Game.query.filter_by(gamename=form.gamename.data).first()
+                if game is not None:
+                    flash("Please use different game name; This one exists.")
+                    return redirect('routes.game_editor.html')
+        else:
+            return redirect(url_for('routes.login'))
+        return render_template('game_editor.html', form=form)
 
     return routes
