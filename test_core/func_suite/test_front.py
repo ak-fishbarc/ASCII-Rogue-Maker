@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 import unittest
 import time
 
-from rogue_core import db, User
+from rogue_core import db, game_db, User, Game
 
 
 class TestFirst(unittest.TestCase):
@@ -109,10 +109,20 @@ class TestFirst(unittest.TestCase):
             i += 1
         form.submit()
 
+        self.browser.get('http://localhost:5000/game/Test Game')
+        check_title = self.browser.find_element(By.TAG_NAME, 'title')
+        self.assertNotIn("404", check_title.text)
+        check_title = self.browser.find_element(By.TAG_NAME, 'title')
+        self.assertNotIn("Unauthorized", check_title.text)
+
     def test_04_drop_database_changes(self):
         clean_up = User.query.filter_by(username="Jon Irenicus").first()
         db.session.delete(clean_up)
         db.session.commit()
+
+        clean_up = Game.query.filter_by(gamename="Test Game").first()
+        game_db.session.delete(clean_up)
+        game_db.session.commit()
 
 
 if __name__ == "__main__":
