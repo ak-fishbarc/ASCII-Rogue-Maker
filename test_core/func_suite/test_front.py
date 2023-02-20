@@ -81,6 +81,34 @@ class TestFirst(unittest.TestCase):
         check_page = self.browser.current_url
         self.assertNotEqual(check_page, 'http://localhost:5000/home')
 
+    def test_03_front_of_game_editor(self):
+        self.browser.get('http://localhost:5000/login')
+        form = self.browser.find_element(By.TAG_NAME, 'form')
+        # Find input fields.
+        ids = ["username", "password", "submit"]
+        these_keys = ["Jon Irenicus", "operationAurora"]
+        # Login to account.
+        i = 0
+        while i < len(these_keys):
+            time.sleep(1)
+            field = self.browser.find_element(By.ID, ids[i])
+            field.send_keys(these_keys[i])
+            i += 1
+        form.submit()
+
+        time.sleep(1)
+        self.browser.get('http://localhost:5000/game_editor')
+        form = self.browser.find_element(By.TAG_NAME, 'form')
+        ids = ["gamename"]
+        these_keys = ["Test Game"]
+        i = 0
+        while i < len(these_keys):
+            time.sleep(1)
+            field = self.browser.find_element(By.ID, ids[i])
+            field.send_keys(these_keys[i])
+            i += 1
+        form.submit()
+
     def test_04_drop_database_changes(self):
         clean_up = User.query.filter_by(username="Jon Irenicus").first()
         db.session.delete(clean_up)

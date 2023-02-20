@@ -2,7 +2,7 @@ import unittest
 
 from werkzeug.test import Client
 from rogue_core import create_app, create_db, set_up_db_users, set_up_db_game, UserMixin, LoginManager
-from rogue_forms import create_forms
+from rogue_forms import create_forms, create_game_forms
 from rogue_routes import create_routes
 from config import TestingConfig
 
@@ -29,8 +29,9 @@ class TestBack(unittest.TestCase):
 
         # Set up routes.
         forms, RegisterForm, LoginForm = create_forms(self.User)
+        game_forms, NewGameForm = create_game_forms(self.Game)
         self.app.register_blueprint(forms)
-        routes = create_routes(RegisterForm, LoginForm, self.User, self.db)
+        routes = create_routes(RegisterForm, LoginForm, NewGameForm, self.User, self.Game, self.db)
         self.app.register_blueprint(routes)
 
         # Build up.
@@ -63,6 +64,7 @@ class TestBack(unittest.TestCase):
     def test_back_of_game_editor(self):
         response = self.server.get('/game_editor')
         self.assertEqual(response.status_code, 200)
+        self.assertIn('form', response.data.decode())
 
     def test_db_user_model(self):
         u = self.User(username="DecardCain", email="DecardCain@example.co.uk")
