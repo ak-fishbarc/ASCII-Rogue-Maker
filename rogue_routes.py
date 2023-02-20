@@ -53,12 +53,18 @@ def create_routes(RegisterForm, LoginForm, NewGameForm, User, Game, db):
         if current_user.is_authenticated:
             form = NewGameForm()
             if form.validate_on_submit():
-                game = Game.query.filter_by(gamename=form.gamename.data).first()
-                if game is not None:
-                    flash("Please use different game name; This one exists.")
-                    return redirect('routes.game_editor.html')
+                game = Game(gamename=form.gamename.data)
+                db.session.add(game)
+                db.session.commit()
+                return render_template('game.html', game=game)
         else:
             return redirect(url_for('routes.login'))
         return render_template('game_editor.html', form=form)
+
+    @routes.route('/game/<gamename>')
+    @login_required
+    def game(gamename):
+        game = Game.query.filter_by(gamename=gamename).first_or_404()
+        return render_template('game.html', game=game)
 
     return routes
