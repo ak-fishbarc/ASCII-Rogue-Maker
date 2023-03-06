@@ -46,4 +46,8 @@ def create_game_forms(db_model):
             if new_game is not None:
                 raise ValidationError("Please change the name.")
 
-    return game_forms, NewGameForm
+    class NewTileForm(FlaskForm):
+        tilename = StringField('Tilename', validators=[DataRequired()])
+        submit = SubmitField('Create Tile')
+
+    return game_forms, NewGameForm, NewTileForm
