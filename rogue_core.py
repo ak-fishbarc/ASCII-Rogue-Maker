@@ -32,6 +32,7 @@ def set_up_db_users(db, UserMixin, login):
 def set_up_db_game(db):
     Game, Tiles = initialize_game(db)
     db.relationship(Game)
+    db.relationship(Tiles)
     return Game, Tiles
 
 

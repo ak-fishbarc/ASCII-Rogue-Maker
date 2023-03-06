@@ -36,6 +36,7 @@ def initialize_game(db):
         __bind_key__ = "game_db"
         id = db.Column(db.Integer, primary_key=True)
         tilename = db.Column(db.String(64), index=True, unique=True)
+        tileicon = db.Column(db.String(5), index=True, unique=False)
 
     return Game, Tiles
 

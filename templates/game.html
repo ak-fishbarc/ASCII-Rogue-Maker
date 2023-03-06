@@ -10,6 +10,8 @@
             {% for error in form.tilename.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
+            {{ form.tileicons.label }}<br>
+            {{ form.tileicons() }}
         </p>
         <p>
             <p>{{ form.submit() }}</p>
