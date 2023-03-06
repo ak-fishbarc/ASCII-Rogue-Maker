@@ -68,10 +68,10 @@ def create_routes(RegisterForm, LoginForm, NewGameForm, NewTileForm, User, Game,
         game = Game.query.filter_by(gamename=gamename).first_or_404()
         tiles = Tiles.query.all()
         if form.validate_on_submit():
-            tile = Tiles(tilename=form.tilename.data)
+            tile = Tiles(tilename=form.tilename.data, tileicon=form.tileicons.data)
             db.session.add(tile)
             db.session.commit()
-            return render_template('game.html', game=game, form=form, tiles=tiles)
+            return redirect(url_for('routes.game', gamename=game.gamename, form=form, tiles=tiles))
         return render_template('game.html', game=game, form=form, tiles=tiles)
 
     return routes

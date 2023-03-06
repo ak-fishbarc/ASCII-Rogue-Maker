@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask_wtf import FlaskForm
-from wtforms import StringField, EmailField, PasswordField, SubmitField
+from wtforms import StringField, EmailField, PasswordField, SubmitField, RadioField
 from wtforms.validators import Email, DataRequired, EqualTo, ValidationError
 
 
@@ -48,6 +48,7 @@ def create_game_forms(db_model):
 
     class NewTileForm(FlaskForm):
         tilename = StringField('Tilename', validators=[DataRequired()])
+        tileicons = RadioField('Tileicons', choices=[' . ', '  ', ' , '], validators=[DataRequired()])
         submit = SubmitField('Create Tile')
 
     return game_forms, NewGameForm, NewTileForm
