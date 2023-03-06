@@ -2,4 +2,21 @@
 
 {% block content %}
     <p>{{ game.gamename }} Editor</p>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.tilename.label }}<br>
+            {{ form.tilename(size=32) }}
+            {% for error in form.tilename.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            <p>{{ form.submit() }}</p>
+        </p>
+    </form>
+    {% for tile in tiles %}
+    <p>{{ tile.tilename }} </p>
+    {% endfor %}
+
 {% endblock %}

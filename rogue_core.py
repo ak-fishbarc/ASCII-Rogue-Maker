@@ -30,9 +30,9 @@ def set_up_db_users(db, UserMixin, login):
 
 
 def set_up_db_game(db):
-    Game = initialize_game(db)
+    Game, Tiles = initialize_game(db)
     db.relationship(Game)
-    return Game
+    return Game, Tiles
 
 
 # Create app.
@@ -47,7 +47,7 @@ db.init_app(app)
 # Set up second database for game related data. As there will be more user
 # interaction in game editing, so user database and game database are separate.
 game_db = create_db(app)
-Game = set_up_db_game(game_db)
+Game, Tiles = set_up_db_game(game_db)
 game_db.init_app(app)
 
 # Set up blueprints.
@@ -56,7 +56,7 @@ game_forms, NewGameForm, NewTileForm = create_game_forms(Game)
 
 app.register_blueprint(game_forms)
 app.register_blueprint(forms)
-routes = create_routes(RegisterForm, LoginForm, NewGameForm, NewTileForm, User, Game, db)
+routes = create_routes(RegisterForm, LoginForm, NewGameForm, NewTileForm, User, Game, Tiles, db)
 app.register_blueprint(routes)
 
 # Build everything up.
