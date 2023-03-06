@@ -52,11 +52,11 @@ game_db.init_app(app)
 
 # Set up blueprints.
 forms, RegisterForm, LoginForm = create_forms(User)
-game_forms, NewGameForm = create_game_forms(Game)
+game_forms, NewGameForm, NewTileForm = create_game_forms(Game)
 
 app.register_blueprint(game_forms)
 app.register_blueprint(forms)
-routes = create_routes(RegisterForm, LoginForm, NewGameForm, User, Game, db)
+routes = create_routes(RegisterForm, LoginForm, NewGameForm, NewTileForm, User, Game, db)
 app.register_blueprint(routes)
 
 # Build everything up.

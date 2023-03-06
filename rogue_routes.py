@@ -3,7 +3,7 @@ from flask import render_template, redirect, url_for
 from flask_login import current_user, login_user, logout_user, login_required
 
 
-def create_routes(RegisterForm, LoginForm, NewGameForm, User, Game, db):
+def create_routes(RegisterForm, LoginForm, NewGameForm, NewTileForm, User, Game, db):
 
     routes = Blueprint('routes', __name__)
 
@@ -56,7 +56,7 @@ def create_routes(RegisterForm, LoginForm, NewGameForm, User, Game, db):
                 game = Game(gamename=form.gamename.data)
                 db.session.add(game)
                 db.session.commit()
-                return render_template('game.html', game=game)
+                return redirect(url_for('routes.game', gamename=form.gamename.data))
         else:
             return redirect(url_for('routes.login'))
         return render_template('game_editor.html', form=form)
@@ -64,7 +64,8 @@ def create_routes(RegisterForm, LoginForm, NewGameForm, User, Game, db):
     @routes.route('/game/<gamename>')
     @login_required
     def game(gamename):
+        form = NewTileForm()
         game = Game.query.filter_by(gamename=gamename).first_or_404()
-        return render_template('game.html', game=game)
+        return render_template('game.html', game=game, form=form)
 
     return routes
