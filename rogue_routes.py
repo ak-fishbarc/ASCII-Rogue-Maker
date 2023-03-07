@@ -46,14 +46,15 @@ def create_routes(RegisterForm, LoginForm, NewGameForm, NewTileForm, User, Game,
     @login_required
     def user(username):
         user = User.query.filter_by(username=username).first_or_404()
-        return render_template('profile.html', user=user)
+        games = Game.query.filter_by(user_id=current_user.get_id())
+        return render_template('profile.html', user=user, games=games)
 
     @routes.route('/game_editor', methods=["GET", "POST"])
     def game_editor():
         if current_user.is_authenticated:
             form = NewGameForm()
             if form.validate_on_submit():
-                game = Game(gamename=form.gamename.data)
+                game = Game(gamename=form.gamename.data, user_id=current_user.get_id())
                 db.session.add(game)
                 db.session.commit()
                 return redirect(url_for('routes.game', gamename=form.gamename.data))
@@ -68,7 +69,7 @@ def create_routes(RegisterForm, LoginForm, NewGameForm, NewTileForm, User, Game,
         game = Game.query.filter_by(gamename=gamename).first_or_404()
         tiles = Tiles.query.all()
         if form.validate_on_submit():
-            tile = Tiles(tilename=form.tilename.data, tileicon=form.tileicons.data)
+            tile = Tiles(tilename=form.tilename.data, tileicon=form.tileicons.data, game_id=game.id)
             db.session.add(tile)
             db.session.commit()
             return redirect(url_for('routes.game', gamename=game.gamename, form=form, tiles=tiles))
