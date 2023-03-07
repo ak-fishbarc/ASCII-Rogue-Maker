@@ -2,4 +2,7 @@
 
 {% block content %}
     <h1>Hello {{ user.username }}</h1>
+    {% for game in games %}
+        <p> {{ game.gamename }}</p>
+    {% endfor %}
 {% endblock %}
